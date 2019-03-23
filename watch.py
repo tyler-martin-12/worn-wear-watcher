@@ -11,8 +11,6 @@ from oauth2client import client, tools, file
 import base64
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-#import apiclient
-#from apiclient import errors, discovery
 from googleapiclient.discovery import build
 import mimetypes
 from email.mime.image import MIMEImage
@@ -91,28 +89,8 @@ def CreateMessageHtml(sender, to, subject, msgHtml, msgPlain):
     msg['Subject'] = subject
     msg['From'] = sender
     msg['To'] = to
-    #msg.attach(MIMEText(msgPlain, 'plain'))
     msg.attach(MIMEText(msgHtml, 'html'))
     return {'raw': base64.urlsafe_b64encode(msg.as_string().encode()).decode()}
-
-def is_available(url,keywords):
-    b = 1
-    code = requests.get(url)
-    s = BeautifulSoup(code.text, 'html.parser')
-    r = s.find_all('span', class_='title')
-    for each in r:
-        txt = each.text
-        if txt.find('Sorry') > -1:
-            b = 0
-        for keyword in keywords:
-            if txt.find(keyword) > -1:
-                #print(txt)
-                b = 0
-    if b == 0:
-        return False
-    else:
-        return True
-
 
 def main(url, flag):
     to = "tyler.a.martin12@gmail.com"
@@ -142,7 +120,6 @@ class worker(object):
     def job(self):
         parser = argparse.ArgumentParser(parents=[tools.argparser])
         flag = parser.parse_args()
-        #print(flag)
 
         next_num = []
 
@@ -164,5 +141,6 @@ class worker(object):
 
 my_worker = worker()
 scheduler = BlockingScheduler()
-scheduler.add_job(my_worker.job, 'interval', minutes=20)
+# change the execution iterval below
+scheduler.add_job(my_worker.job, 'interval', seconds=10)
 scheduler.start()
