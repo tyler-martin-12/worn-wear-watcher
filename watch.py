@@ -41,23 +41,25 @@ def get_credentials(flag):
     return credentials
 
 def num_items(url):
+    # returns the number of items available from the url
     code = requests.get(url)
     s = BeautifulSoup(code.text, 'html.parser')
     source = s.find_all('span', class_='title')
 
     num = 0
 
+    # these appear when 0 items are available and must be checked
     falsifiers = ['Sorry','Shop']
 
     for item in source:
         item_title = item.text
 
-        nope = 0
+        item_is_real = True
         for f in falsifiers:
             if f in item_title:
-                nope = 1
+                item_is_real = False
 
-        if nope == 0:
+        if item_is_real == True:
             num += 1
         
     return num
@@ -92,7 +94,8 @@ def CreateMessageHtml(sender, to, subject, msgHtml, msgPlain):
     msg.attach(MIMEText(msgHtml, 'html'))
     return {'raw': base64.urlsafe_b64encode(msg.as_string().encode()).decode()}
 
-def main(url, flag):
+def make_email(url, flag):
+    # compose the email content here
     to = "tyler.a.martin12@gmail.com"
     sender = "tyler.a.martin12@gmail.com"
     subject = "worn wear"
@@ -100,18 +103,18 @@ def main(url, flag):
     msgPlain = ''
     SendMessage(sender, to, subject, msgHtml, msgPlain, flag)
 
-class worker(object):
+class watcher(object):
     def __init__(self):
         self.urls = []
         url_list = []
 
-        # Any 32
+        # Size 32 Men's Performance Jeans
         url_list.append('https://wornwear.patagonia.com/shop/search?size=32&category=Pants&q=performance%20jeans')
 
-        # Any 33
+        # Size 33 Men's Performance Jeans
         url_list.append('https://wornwear.patagonia.com/shop/search?size=33&category=Pants&q=performance%20jeans')
         
-        # Any 34
+        # Size 34 Men's Performance Jeans
         url_list.append('https://wornwear.patagonia.com/shop/search?size=34&category=Pants&q=performance%20jeans')
         
         for i in range(len(url_list)):
@@ -127,7 +130,7 @@ class worker(object):
             num = num_items(url)
             
             if num > prev_num:
-                main(url, flag)
+                make_email(url, flag)
                 
             next_num.append(num)
 
@@ -139,8 +142,8 @@ class worker(object):
         print(next_num)
 
 
-my_worker = worker()
+my_watcher = watcher()
 scheduler = BlockingScheduler()
 # change the execution iterval below
-scheduler.add_job(my_worker.job, 'interval', seconds=10)
+scheduler.add_job(my_watcher.job, 'interval', minutes=1)
 scheduler.start()
