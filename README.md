@@ -22,7 +22,7 @@ A list of [search urls](https://wornwear.patagonia.com/shop/search?size=32&categ
 `pip install --upgrade google-api-python-client`
 `pip install gflags`
 `pip install uritemplate`
-##### gmail API
+###### gmail API
 Follow the [python gmail quickstart guide](https://developers.google.com/gmail/api/quickstart/python)
 
 ## What to modify in watch.py
@@ -63,6 +63,3 @@ The list above corresponds to how many of each item (urls) are available
 ## Sources for code
 ### gmail api
 code adapted from [stackover user 'apadana'](https://stackoverflow.com/questions/37201250/sending-email-via-gmail-python/37267330)
-
-
-### scheduler
