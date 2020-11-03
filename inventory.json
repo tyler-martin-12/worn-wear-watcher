@@ -1,0 +1,30 @@
+{
+    "shop/search?size=32&category=Pants&q=performance%20jeans": [
+        "297624",
+        "18725",
+        "32698"
+    ],
+    "shop/search?size=33&category=Pants&q=performance%20jeans": [
+        "297624",
+        "16552",
+        "78358",
+        "18092",
+        "292581",
+        "26222",
+        "18725",
+        "32698"
+    ],
+    "shop/search?size=34&category=Pants&q=performance%20jeans": [
+        "16455",
+        "70951",
+        "86675",
+        "14672",
+        "214958",
+        "616557",
+        "710887",
+        "78358",
+        "18754",
+        "18725",
+        "57554"
+    ]
+}
