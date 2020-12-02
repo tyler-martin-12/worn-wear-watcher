@@ -1,3 +1,2 @@
-shop/search?size=32&category=Pants&q=performance%20jeans
-shop/search?size=33&category=Pants&q=performance%20jeans
-shop/search?size=34&category=Pants&q=performance%20jeans
+shop/search?size=L&q=fjord
+shop/search?q=black%20hole%20cube

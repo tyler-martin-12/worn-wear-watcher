@@ -12,9 +12,10 @@ from email.mime.audio import MIMEAudio
 from email.mime.base import MIMEBase
 import requests
 from bs4 import BeautifulSoup
-import datetime
+from datetime import datetime
 import argparse
 import json
+import time
 
 SCOPES = 'https://www.googleapis.com/auth/gmail.send'
 CLIENT_SECRET_FILE = 'client_secret.json'
@@ -74,10 +75,14 @@ def read_url_list():
 
 
 def initialize_inventory(url_list):
-    if os.path.exists('inventory.json'):
-        return
     url_list = read_url_list()
-    inventory = {url: [] for url in url_list}
+    if os.path.exists('inventory.json'):
+         inventory = read_inventory()
+         for url in url_list:
+             if url not in inventory:
+                 inventory[url] = []
+    else:
+        inventory = {url: [] for url in url_list}
     dump_inventory(inventory)
 
 
@@ -141,6 +146,16 @@ def make_email(email_list):
     send_message(sender, to, subject, msgHtml, msgPlain)
     return msgHtml
 
+def get_unix_time():
+    now = datetime.now()
+    unix = int(time.mktime(now.timetuple()))
+    return unix
+
+def unix_time_to_str(unix):
+    ts = datetime.fromtimestamp(unix)
+    fmt = '%Y%m%d %H:%M'
+    ts_str = ts.strftime(fmt)
+    return ts_str
 
 def start_watching():
     url_list = read_url_list()
@@ -151,8 +166,9 @@ def start_watching():
     if len(email_list) > 0:
         msg = make_email(email_list)
     dump_inventory(inventory)
-    print(f'{len(email_list)} items added')
-
+    now = get_unix_time()
+    now_str = unix_time_to_str(now)
+    print(f'{now_str}: {len(email_list)} items added')
 
 if __name__ == '__main__':
     start_watching()
